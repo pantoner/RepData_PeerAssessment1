@@ -3,29 +3,39 @@
 
 ## Loading and preprocessing the data
 
-
-
+library(ggplot2)
+library(scales)
+activity1<-read.csv(activity.csv)
+activity$date<- as.Date(activity$date, format="%Y-%m-%d")
+class(activity$date)
 ## What is mean total number of steps taken per day?
 
-
+A2<-activity[,sum(step), by= "date"]
+library(plyr)
+A2<-ddply(activity, .(date), transform, stepsperday = sum(steps))
+names(A2)
+A3<-A2[,c(2,4)]
+fix(A2)
+hist(A3$stepsperday, xlab = "Steps Per Day")
+summary(A3$stepsperday)
 
 ## What is the average daily activity pattern?
+A5<- activity[ ,c(1,3)]
+A5[is.na(A5)] <- 0
 
+
+A4<-ddply(A5, .(interval), transform, stepsperday = sum(steps))
+A4<-A4[,c(2,3)]
+A4<-unique(A4)
+plot(A4$interval,A4$stepsperday, type = "l" ,xlab =  "Interval", ylab = "Steps Per Day")
 
 
 ## Imputing missing values
 y <- A5$steps[is.na(A5$steps)]
 
+(y)
 
 ## Are there differences in activity patterns between weekdays and weekends?
-
-activity1<-read.csv(activity.csv)
-
-library(ggplot2)
-library(scales)
-activity$date<- as.Date(activity$date, format="%Y-%m-%d")
-class(activity$date)
-
 
 names(activity)
 hist(activity$steps)
